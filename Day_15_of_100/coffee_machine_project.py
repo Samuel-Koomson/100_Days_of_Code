@@ -12,11 +12,11 @@ def report(resources, coffee_type):
     return available_resources
 
 
-remaining = report(resources, 'espresso')
-# coffee_type = 'latte'
-print(f"The remaining resource value for {'coffee_type'}")
-for ingredient, quantity in remaining.items():
-    print(f"{ingredient}: {quantity}")
+# remaining = report(resources, 'espresso')
+# # coffee_type = 'latte'
+# print(f"The remaining resource value for {'coffee_type'}")
+# for ingredient, quantity in remaining.items():
+#     print(f"{ingredient}: {quantity}")
 
 
 def stock_supply(coffee):
@@ -25,7 +25,7 @@ def stock_supply(coffee):
         if quantity > resources.get(ingredient, 0):
             print(f"Sorry there is not enough stock for {coffee}")
             return
-stock_supply(coffee='cappuccino')
+#stock_supply(coffee)
 
 
 def coin_calculator(coins):
@@ -37,8 +37,8 @@ def coin_calculator(coins):
             coin_amount += value_of_coin * count
 
     return coin_amount
-inserted_coin = {'quarter': 10, 'dimes': 20}
-print(f"Total coin amount is ${inserted_coin}")
+# inserted_coin = {'quarter': 10, 'dimes': 20}
+# print(f"Total coin amount is ${inserted_coin}")
 coin_calculator(inserted_coin)
 
 
@@ -46,7 +46,7 @@ def transaction_verification():
     price = MENU['cost']
     if price <= coin_calculator(inserted_coin):
         change = coin_calculator(inserted_coin) - price
-        Sales = price - change
+        Sales = MENU['cost']
         print(f"Sales ${Sales:.2f}")
         return change
     else:
@@ -54,10 +54,36 @@ def transaction_verification():
 
 transaction_verification()
 
-def prompt():
+
+# transaction_verification() = True:
+while transaction_verification() == True:
+
     prompt = input("What would you like? ('espresso'/'latte'/'cappuccino'")
     if prompt == 'off':
         print("Coffee machine is shutting down for maintenance")
+        break
     if prompt == 'report':
-        print(f"Your available resources in the machine are report(resources, coffee_type)")
+        print(f"Your available resources in the machine are {report(resources, 'coffee_type')}")
+    if prompt == 'espresso':
+        stock_supply(coffee='espresso')
+        cash_input = float(input("Please insert your coins in this order 'quarter'\n 'Dimes'\n 'nickle'\n 'pennies'\n "))
+        coin_calculator(coins= cash_input)
+        transaction_verification()
+        print(f"Here is your {prompt}, enjoy it! ")
+    elif prompt == 'latte':
+        stock_supply(coffee='latte')
+        cash_input = float(
+        input("Please insert your coins in this order 'quarter'\n 'Dimes'\n 'nickle'\n 'pennies'\n "))
+        coin_calculator(coins= cash_input)
+        transaction_verification()
+        print(f"Here is your {prompt}, enjoy it! ")
+    else:
+        if prompt == 'cappuccino':
+            stock_supply(coffee= 'Cappuccino')
+            cash_input = float(
+            input("Please insert your coins in this order 'quarter'\n 'Dimes'\n 'nickle'\n 'pennies'\n "))
+            coin_calculator(coins=cash_input)
+            transaction_verification()
+            print(f"Here is your {prompt}, enjoy it! ")
+
 

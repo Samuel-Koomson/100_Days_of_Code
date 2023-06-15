@@ -1,5 +1,3 @@
-#This file contains the neccessary data needed to excute the project successfully
-
 MENU = {
     "espresso": {
         "ingredients": {
