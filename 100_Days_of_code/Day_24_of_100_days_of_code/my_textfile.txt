@@ -1,0 +1,1 @@
+This is an update using the write optionThis is option allows for the addition of new text in the document to be appendedThis is option allows for the addition of new text in the document to be appended
