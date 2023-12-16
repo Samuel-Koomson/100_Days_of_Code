@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import pyperclip
+import json
 
 # ---------------------------- CONSTANTS ------------------------------- #
 BLUE = "#6527BE"
@@ -51,24 +52,57 @@ def save_data():
     website = website_text.get()
     user_id = email_text.get()
     password = password_text.get()
+    json_data = {
+        website: {
+            'user_id': user_id,
+            'password': password
+        }
+    }
 
     if len(website) == 0 or len(password) == 0 or len(user_id) == 0:
         messagebox.showinfo(title="Error", message="Field can not be empty")
 
     else:
-        good_to_go = messagebox.askokcancel(title='Confirmation,Please confirm entry for correctness', message=f"website: {website} "
-                                                             f"\nuser.id: {user_id} \npassword: {password}\n")
+        with open("password_data.json", 'r') as pass_data:
+            # json.dump(json_data, pass_data, indent=4)
 
-        if good_to_go:
-            with open("password_data.txt", 'a') as pass_data:
-                pass_data.write(f"website: {website} | user.id: {user_id} | password: {password}\n")
-                website_text.delete(0, END)
-                password_text.delete(0, END)
-# ---------------------------- UI SETUP ------------------------------- #
+            # print(json.load(pass_data))
+            data = json.load(pass_data)
+            data.update(json_data)
+
+        with open("password_data.json", 'w') as pass_data:
+            json.dump(data, pass_data, indent=4)
+
+            # website_text.delete(0, END)
+            # password_text.delete(0, END)
+
+#Viewing password#
+
+def view_passwords():
+    with open("password_data.json", 'r') as pass_data:
+        data = json.load(pass_data)
+        passwords = []
+        for website, info in data.items():
+            passwords.append(f"Website: {website} | User ID: {info['user_id']} | Password: {info['password']}")
+        messagebox.showinfo(title="Passwords", message="\n".join(passwords))
+
+#Search passwords #
+
+def search_password():
+    website = website_text.get()
+    with open("password_data.json", 'r') as pass_data:
+        data = json.load(pass_data)
+        if website in data:
+            info = data[website]
+            messagebox.showinfo(title=website, message=f"Website: {website} | User ID: {info['user_id']} | Password: {info['password']}")
+        else:
+            messagebox.showinfo(title="Not Found", message=f"No password found for {website}")
+
+# UI SETUP #
 
 console = Tk()
 console.title('Password Manager App Using Tk GUI')
-console.config(width=500, height=500, padx=110, pady=90, bg=TEAL)
+console.config(width=500, height=500, padx=80, pady=50, bg=TEAL)
 
 console_canvas = Canvas(width=300, height=300, bg=MINT, highlightthickness=0)
 canvas_image = PhotoImage(file="logo.png")
@@ -102,5 +136,11 @@ add_button.place(x=100, y=365)
 password_generator_button = Button(text="Generate Password", command=password_generator)
 password_generator_button.place(x=215, y=340)
 password_generator_button.config(padx=0, pady=0)
+
+view_button = Button(text="View Passwords", width=25, command=view_passwords)
+view_button.place(x=100, y=395)
+
+search_button = Button(text="Search Password", width=25, command=search_password)
+search_button.place(x=215, y=395)
 
 console.mainloop()
